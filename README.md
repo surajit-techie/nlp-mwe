@@ -2,4 +2,5 @@ This is a Python program to get bigrams from a text file and calculate the PMI (
 
 Usage:
 $ python bigram.py > out.txt
+
 The out.txt file contains the output.
