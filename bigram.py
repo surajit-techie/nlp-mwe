@@ -1,0 +1,49 @@
+from __future__ import division
+from nltk.corpus import stopwords
+import numpy
+import math
+import re
+
+#Defining stopwords and delimeters
+stop = stopwords.words('english')
+delimiters = ",",".", ":", ";", "--","(",")","?"
+
+#Reading text file
+text = ''.join(open('alice.txt').readlines())
+
+#Cleaning up the text and splitting into sentences
+text = text.replace("\n\n","\n")
+text = text.replace("\n"," ")
+text = text.lower()
+regex_pattern = '|'.join(map(re.escape, delimiters))
+sentences = re.split(regex_pattern, text)
+
+#Splitting into words
+words =  [word for line in sentences for word in line.split() if word not in stop]
+bigrams = [words[i]+" "+words[i+1] for i in range(len(words)-1)]
+len_x = len_y = len(words)
+len_xy = len(bigrams)
+
+pmi_grams = []
+
+for i in range(len(bigrams)):
+	first,second = map(str,bigrams[i].split())
+	n_x = words.count(first)
+	n_y = words.count(second)
+	n_xy = bigrams.count(bigrams[i])
+	p_x = n_x/len_x
+	p_y = n_y/len_y
+	p_xy = n_xy/len_xy
+	
+	if (p_x or p_y) != 0:
+		pmi_grams.append(math.log(p_xy/(p_x*p_y))) #Calculating the PMI
+
+#Sorting bigrams in decreasing order of pmi_grams
+sorted_index = numpy.argsort(pmi_grams)
+bigrams = [bigrams[i] for i in sorted_index]
+pmi_grams = [pmi_grams[i] for i in sorted_index]
+
+#Output the results
+for i in range(len(bigrams)-1,0,-1):
+	print bigrams[i],'\t','\t',pmi_grams[i]
+
