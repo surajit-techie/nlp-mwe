@@ -9,7 +9,8 @@ stop = stopwords.words('english')
 delimiters = ",",".", ":", ";", "--","(",")","?"
 
 #Reading text file
-text = ''.join(open('alice.txt').readlines())
+filename = "alice.txt"
+text = ''.join(open(filename).readlines())
 
 #Cleaning up the text and splitting into sentences
 text = text.replace("\n\n","\n")
@@ -44,6 +45,10 @@ bigrams = [bigrams[i] for i in sorted_index]
 pmi_grams = [pmi_grams[i] for i in sorted_index]
 
 #Output the results
+print "FILE:\t\t",filename
+print "*************************************"
+print "Bigrams\t\t\t\tPMI"
+print "*************************************"
 for i in range(len(bigrams)-1,0,-1):
 	print bigrams[i],'\t','\t',pmi_grams[i]
 
